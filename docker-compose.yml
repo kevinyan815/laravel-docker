@@ -1,0 +1,49 @@
+version: '2'
+services:
+
+  # The Application
+  app:
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+
+  composer:
+    restart: 'no'
+    image: composer/composer:php7
+    working_dir: /var/www
+    command: install
+    volumes:
+      - ./:/var/www
+      
+  # The Nginx Server
+  nginx:
+    build:
+      context: ./
+      dockerfile: nginx.dockerfile
+    working_dir: /var/www
+    volumes_from:
+      - app
+    ports:
+      - 8080:80
+
+  # The Database
+  database:
+    image: mysql:5.7
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=homestead"
+      - "MYSQL_USER=homestead"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=secret"
+    ports:
+        - "33061:3306"
+
+volumes:
+  dbdata:

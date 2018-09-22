@@ -15,7 +15,7 @@ services:
 
   composer:
     restart: 'no'
-    image: composer/composer:php7
+    image: prooph/composer:7.1
     working_dir: /var/www
     command: install
     volumes:

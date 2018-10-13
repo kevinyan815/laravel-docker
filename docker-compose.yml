@@ -10,6 +10,8 @@ services:
     volumes:
       - ./:/var/www
     environment:
+      # laravel uses dotenv to set and load environment variables,by default it will not overwrite existing environment variables
+      # then DB_HOST in .env will not overlap DB_HOST set in here.
       - "DB_PORT=3306"
       - "DB_HOST=database"
 
